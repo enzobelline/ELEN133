@@ -1,0 +1,476 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>prelab5</title><meta name="generator" content="MATLAB 9.8"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-04-28"><meta name="DC.source" content="prelab5.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Part 1 &amp; 2</a></li><li><a href="#3">Step 3</a></li><li><a href="#4">Step 4</a></li><li><a href="#5">Step 5</a></li><li><a href="#6">Step 6</a></li></ul></div><pre class="codeinput"><span class="comment">% Assginment: Prelab 5</span>
+<span class="comment">% User: Laurence Kim</span>
+<span class="comment">% Date: 04/27/2021</span>
+<span class="comment">% Purpose: Prepare for Lab 5</span>
+</pre><h2 id="2">Part 1 &amp; 2</h2><pre class="codeinput">clc
+clear <span class="string">all</span>
+close <span class="string">all</span>
+
+Fs = 8000;
+T  = 1/Fs;
+F0 = 1280;
+i = 1;
+
+figure()
+hold <span class="string">on</span>
+<span class="keyword">for</span> N = [200 100 50]
+    n = linspace(0,N-1,N);
+    dF = Fs/N;
+    x  = cos(F0*2*pi*T*n);
+    X  = fft(x);
+    fv = (0:N-1)*dF;
+    subplot(3,1,i);
+    plot(fv,abs(X))
+    i = i + 1;
+<span class="keyword">end</span>
+hold <span class="string">off</span>
+
+<span class="comment">% N = 200</span>
+<span class="comment">% i. What are the frequency values of the two pulses? How is this related to F0?</span>
+<span class="comment">% 1280 and 6720. F0 and Fs-f0.</span>
+
+<span class="comment">% ii. What are the indices of the two pulses? How is this related to F0 and &#8710;?</span>
+<span class="comment">% 80. the width is smallest as dF is small as N is large. F0 is the</span>
+<span class="comment">% midpoint of our indices</span>
+
+<span class="comment">% iii. What is the amplitude of the two pulses? How is this related to N?</span>
+<span class="comment">% 100. It is N/2</span>
+
+<span class="comment">% N = 100</span>
+<span class="comment">% i. What are the frequency values of the two pulses? How is this related to F0?</span>
+<span class="comment">% 1280 and 6720. F0 and Fs-f0.</span>
+<span class="comment">% ii. What are the indices of the two pulses? How is this related to F0 and &#8710;?</span>
+<span class="comment">% 160. the width is smallest as dF is small as N is large. F0 is the</span>
+<span class="comment">% midpoint of our indices</span>
+<span class="comment">% iii. What is the amplitude of the two pulses? How is this related to N?</span>
+<span class="comment">% 50. It is N/2</span>
+
+<span class="comment">% N = 50</span>
+<span class="comment">% i. What are the frequency values of the two pulses? How is this related to F0?</span>
+<span class="comment">% 1280 and 6720. F0 and Fs-f0.</span>
+
+<span class="comment">% ii. What are the indices of the two pulses? How is this related to F0 and &#8710;?</span>
+<span class="comment">% 320. the width is smallest as dF is small as N is large. F0 is the</span>
+<span class="comment">% midpoint of our indices</span>
+
+<span class="comment">% iii. What is the amplitude of the two pulses? How is this related to N?</span>
+<span class="comment">% 250. It is N/2</span>
+</pre><img vspace="5" hspace="5" src="prelab5_01.png" alt=""> <h2 id="3">Step 3</h2><pre class="codeinput">i = 1;
+F0 = 1200;
+figure()
+hold <span class="string">on</span>
+<span class="keyword">for</span> N = [200 100 50]
+    n = linspace(0,N-1,N);
+    dF = Fs/N;
+    x  = cos(F0*2*pi*T*n);
+    X  = fft(x);
+    fv = (0:N-1)*dF;
+    subplot(3,1,i);
+    plot(fv,abs(X))
+    i = i + 1;
+<span class="keyword">end</span>
+hold <span class="string">off</span>
+
+<span class="comment">% N = 200</span>
+<span class="comment">% i. What are the frequency values of the two pulses? How is this related to F0?</span>
+<span class="comment">% 1200 and 6800. F0 and Fs-f0.</span>
+
+<span class="comment">% ii. What are the indices of the two pulses? How is this related to F0 and &#8710;?</span>
+<span class="comment">% 80. the width is smallest as dF is small as N is large. F0 is the</span>
+<span class="comment">% midpoint of our indices</span>
+
+<span class="comment">% iii. What is the amplitude of the two pulses? How is this related to N?</span>
+<span class="comment">% 100. It is N/2</span>
+
+<span class="comment">% N = 100</span>
+<span class="comment">% i. What are the frequency values of the two pulses? How is this related to F0?</span>
+<span class="comment">% 1200 and 6800. F0 and Fs-f0.</span>
+<span class="comment">% ii. What are the indices of the two pulses? How is this related to F0 and &#8710;?</span>
+<span class="comment">% 160. the width is smallest as dF is small as N is large. F0 is the</span>
+<span class="comment">% midpoint of our indices</span>
+<span class="comment">% iii. What is the amplitude of the two pulses? How is this related to N?</span>
+<span class="comment">% 50. It is N/2</span>
+
+<span class="comment">% N = 50</span>
+<span class="comment">% i. What are the frequency values of the two pulses? How is this related to F0?</span>
+<span class="comment">% 1200 and 6800. F0 and Fs-f0.</span>
+
+<span class="comment">% ii. What are the indices of the two pulses? How is this related to F0 and &#8710;?</span>
+<span class="comment">% it is hard to tell as the sample points are inaccurate for our frequency</span>
+
+<span class="comment">% iii. What is the amplitude of the two pulses? How is this related to N?</span>
+<span class="comment">% 16.28. It is obviously incorrect as our N is too low.</span>
+
+
+<span class="comment">% . Do all three plots have only two pulses? Explain any difference in the plots</span>
+<span class="comment">% of the DFTs compared to previous results.</span>
+<span class="comment">% Only two pulses. Other than location of pulse peaks, the n=50 graph has a</span>
+<span class="comment">% wacky reset</span>
+</pre><img vspace="5" hspace="5" src="prelab5_02.png" alt=""> <img vspace="5" hspace="5" src="prelab5_03.png" alt=""> <h2 id="4">Step 4</h2><pre class="codeinput">i = 1;
+F0 = 1000;
+figure()
+hold <span class="string">on</span>
+<span class="keyword">for</span> N = [200 100 50]
+    n = linspace(0,N-1,N);
+    dF = Fs/N;
+    x  = cos(F0*2*pi*T*n);
+    X  = fft(x);
+    fv = (0:N-1)*dF;
+    subplot(3,1,i);
+    plot(fv,abs(X))
+    i = i + 1;
+<span class="keyword">end</span>
+hold <span class="string">off</span>
+
+
+<span class="comment">% N = 200</span>
+<span class="comment">% i. What are the frequency values of the two pulses? How is this related to F0?</span>
+<span class="comment">% 1000 and 7000. F0 and Fs-f0.</span>
+
+<span class="comment">% ii. What are the indices of the two pulses? How is this related to F0 and &#8710;?</span>
+<span class="comment">% 80. the width is smallest as dF is small as N is large. F0 is the</span>
+<span class="comment">% midpoint of our indices</span>
+
+<span class="comment">% iii. What is the amplitude of the two pulses? How is this related to N?</span>
+<span class="comment">% 100. It is N/2</span>
+
+<span class="comment">% N = 100</span>
+<span class="comment">% i. What are the frequency values of the two pulses? How is this related to F0?</span>
+<span class="comment">% 1000 and 7000. F0 and Fs-f0.</span>
+<span class="comment">% ii. What are the indices of the two pulses? How is this related to F0 and &#8710;?</span>
+<span class="comment">% it is hard to tell as the sample points are inaccurate for our frequency</span>
+<span class="comment">% iii. What is the amplitude of the two pulses? How is this related to N?</span>
+<span class="comment">% 32.33. It is obviously incorrect as our N is too low.</span>
+
+<span class="comment">% N = 50</span>
+<span class="comment">% i. What are the frequency values of the two pulses? How is this related to F0?</span>
+<span class="comment">% 1000 and 7000. F0 and Fs-f0.</span>
+
+<span class="comment">% ii. What are the indices of the two pulses? How is this related to F0 and &#8710;?</span>
+<span class="comment">% it is hard to tell as the sample points are inaccurate for our frequency</span>
+
+
+<span class="comment">% iii. What is the amplitude of the two pulses? How is this related to N?</span>
+<span class="comment">% 22.87. It is obviously incorrect as our N is too low.</span>
+
+
+<span class="comment">% . Do all three plots have only two pulses? Explain any difference in the plots</span>
+<span class="comment">% of the DFTs compared to previous results.</span>
+<span class="comment">% Only two pulses. Other than location of pulse peaks, the n=100 and n=50 graph have</span>
+<span class="comment">% wacky resets</span>
+</pre><img vspace="5" hspace="5" src="prelab5_04.png" alt=""> <h2 id="5">Step 5</h2><pre class="codeinput">N = 100;
+n = linspace(0,N-1,N);
+F1 = 1000;
+F2 = 1280;
+
+x1 = cos(F1*2*pi*T*n);
+x2 = cos(F2*2*pi*T*n);
+
+N2 = 2*N;
+dF = Fs/N2;
+x = [x1,x2];
+X = fft(x);
+fv = (0:N2-1)*dF;
+figure()
+plot(fv,abs(X))
+
+<span class="comment">% Explain the DFT plot in terms of the previously created DFT plots.</span>
+<span class="comment">% There are two peaks at each pulse and have oscillation rather than smooth</span>
+<span class="comment">% and contiguous rise and falls</span>
+</pre><img vspace="5" hspace="5" src="prelab5_05.png" alt=""> <h2 id="6">Step 6</h2><pre class="codeinput">N = 200;
+n = linspace(0,N-1,N);
+F1 = 1000;
+F2 = 1280;
+
+x1 = cos(F1*2*pi*T*n) + cos(F2*2*pi*T*n);
+
+dF = Fs/N;
+X = fft(x1);
+fv = (0:N-1)*dF;
+figure()
+plot(fv,abs(X))
+
+<span class="comment">% Explain the DFT plot in terms of the previously created DFT plots.</span>
+<span class="comment">% similar as the last in that there are still two peaks but no oscillation, but different from the previous ones as there are two</span>
+<span class="comment">% peaks at each pulse and have oscillation rather than smooth</span>
+<span class="comment">% and contiguous rise and falls</span>
+</pre><img vspace="5" hspace="5" src="prelab5_06.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+% Assginment: Prelab 5
+% User: Laurence Kim
+% Date: 04/27/2021
+% Purpose: Prepare for Lab 5
+%% Part 1 & 2 
+clc
+clear all
+close all
+
+Fs = 8000;
+T  = 1/Fs;
+F0 = 1280;
+i = 1;
+
+figure()
+hold on
+for N = [200 100 50]
+    n = linspace(0,N-1,N);
+    dF = Fs/N;
+    x  = cos(F0*2*pi*T*n);
+    X  = fft(x);
+    fv = (0:N-1)*dF;
+    subplot(3,1,i);
+    plot(fv,abs(X))
+    i = i + 1;
+end
+hold off
+
+% N = 200
+% i. What are the frequency values of the two pulses? How is this related to F0?
+% 1280 and 6720. F0 and Fs-f0.
+
+% ii. What are the indices of the two pulses? How is this related to F0 and ∆?
+% 80. the width is smallest as dF is small as N is large. F0 is the
+% midpoint of our indices
+
+% iii. What is the amplitude of the two pulses? How is this related to N?
+% 100. It is N/2
+
+% N = 100
+% i. What are the frequency values of the two pulses? How is this related to F0?
+% 1280 and 6720. F0 and Fs-f0.
+% ii. What are the indices of the two pulses? How is this related to F0 and ∆?
+% 160. the width is smallest as dF is small as N is large. F0 is the
+% midpoint of our indices
+% iii. What is the amplitude of the two pulses? How is this related to N?
+% 50. It is N/2
+
+% N = 50
+% i. What are the frequency values of the two pulses? How is this related to F0?
+% 1280 and 6720. F0 and Fs-f0.
+
+% ii. What are the indices of the two pulses? How is this related to F0 and ∆?
+% 320. the width is smallest as dF is small as N is large. F0 is the
+% midpoint of our indices
+
+% iii. What is the amplitude of the two pulses? How is this related to N?
+% 250. It is N/2
+
+
+
+%% Step 3
+i = 1;
+F0 = 1200;
+figure()
+hold on
+for N = [200 100 50]
+    n = linspace(0,N-1,N);
+    dF = Fs/N;
+    x  = cos(F0*2*pi*T*n);
+    X  = fft(x);
+    fv = (0:N-1)*dF;
+    subplot(3,1,i);
+    plot(fv,abs(X))
+    i = i + 1;
+end
+hold off
+
+% N = 200
+% i. What are the frequency values of the two pulses? How is this related to F0?
+% 1200 and 6800. F0 and Fs-f0.
+
+% ii. What are the indices of the two pulses? How is this related to F0 and ∆?
+% 80. the width is smallest as dF is small as N is large. F0 is the
+% midpoint of our indices
+
+% iii. What is the amplitude of the two pulses? How is this related to N?
+% 100. It is N/2
+
+% N = 100
+% i. What are the frequency values of the two pulses? How is this related to F0?
+% 1200 and 6800. F0 and Fs-f0.
+% ii. What are the indices of the two pulses? How is this related to F0 and ∆?
+% 160. the width is smallest as dF is small as N is large. F0 is the
+% midpoint of our indices
+% iii. What is the amplitude of the two pulses? How is this related to N?
+% 50. It is N/2
+
+% N = 50
+% i. What are the frequency values of the two pulses? How is this related to F0?
+% 1200 and 6800. F0 and Fs-f0.
+
+% ii. What are the indices of the two pulses? How is this related to F0 and ∆?
+% it is hard to tell as the sample points are inaccurate for our frequency
+
+% iii. What is the amplitude of the two pulses? How is this related to N?
+% 16.28. It is obviously incorrect as our N is too low.
+
+
+% . Do all three plots have only two pulses? Explain any difference in the plots
+% of the DFTs compared to previous results.
+% Only two pulses. Other than location of pulse peaks, the n=50 graph has a
+% wacky reset
+%% Step 4
+i = 1;
+F0 = 1000;
+figure()
+hold on
+for N = [200 100 50]
+    n = linspace(0,N-1,N);
+    dF = Fs/N;
+    x  = cos(F0*2*pi*T*n);
+    X  = fft(x);
+    fv = (0:N-1)*dF;
+    subplot(3,1,i);
+    plot(fv,abs(X))
+    i = i + 1;
+end
+hold off
+
+
+% N = 200
+% i. What are the frequency values of the two pulses? How is this related to F0?
+% 1000 and 7000. F0 and Fs-f0.
+
+% ii. What are the indices of the two pulses? How is this related to F0 and ∆?
+% 80. the width is smallest as dF is small as N is large. F0 is the
+% midpoint of our indices
+
+% iii. What is the amplitude of the two pulses? How is this related to N?
+% 100. It is N/2
+
+% N = 100
+% i. What are the frequency values of the two pulses? How is this related to F0?
+% 1000 and 7000. F0 and Fs-f0.
+% ii. What are the indices of the two pulses? How is this related to F0 and ∆?
+% it is hard to tell as the sample points are inaccurate for our frequency
+% iii. What is the amplitude of the two pulses? How is this related to N?
+% 32.33. It is obviously incorrect as our N is too low.
+
+% N = 50
+% i. What are the frequency values of the two pulses? How is this related to F0?
+% 1000 and 7000. F0 and Fs-f0.
+
+% ii. What are the indices of the two pulses? How is this related to F0 and ∆?
+% it is hard to tell as the sample points are inaccurate for our frequency
+
+
+% iii. What is the amplitude of the two pulses? How is this related to N?
+% 22.87. It is obviously incorrect as our N is too low.
+
+
+% . Do all three plots have only two pulses? Explain any difference in the plots
+% of the DFTs compared to previous results.
+% Only two pulses. Other than location of pulse peaks, the n=100 and n=50 graph have
+% wacky resets
+
+%% Step 5
+N = 100;
+n = linspace(0,N-1,N);
+F1 = 1000;
+F2 = 1280;
+
+x1 = cos(F1*2*pi*T*n);
+x2 = cos(F2*2*pi*T*n);
+
+N2 = 2*N;
+dF = Fs/N2;
+x = [x1,x2];
+X = fft(x);
+fv = (0:N2-1)*dF;
+figure()
+plot(fv,abs(X))
+
+% Explain the DFT plot in terms of the previously created DFT plots.
+% There are two peaks at each pulse and have oscillation rather than smooth
+% and contiguous rise and falls
+
+%% Step 6
+N = 200;
+n = linspace(0,N-1,N);
+F1 = 1000;
+F2 = 1280;
+
+x1 = cos(F1*2*pi*T*n) + cos(F2*2*pi*T*n);
+
+dF = Fs/N;
+X = fft(x1);
+fv = (0:N-1)*dF;
+figure()
+plot(fv,abs(X))
+
+% Explain the DFT plot in terms of the previously created DFT plots.
+% similar as the last in that there are still two peaks but no oscillation, but different from the previous ones as there are two 
+% peaks at each pulse and have oscillation rather than smooth
+% and contiguous rise and falls
+
+##### SOURCE END #####
+--></body></html>

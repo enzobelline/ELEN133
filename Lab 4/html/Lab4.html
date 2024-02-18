@@ -1,0 +1,777 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Lab 4</title><meta name="generator" content="MATLAB 9.8"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-05-09"><meta name="DC.source" content="Lab4.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Lab 4</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Part I:</a></li><li><a href="#2">Part II:</a></li><li><a href="#3">Part 3:</a></li><li><a href="#4">5 button</a></li></ul></div><h2 id="1">Part I:</h2><pre class="codeinput">dial_scu = [3 5 7 11] ;
+
+testSig1 = my_dtmf(0.25, 0.05, 8000, dial_scu);
+testSig2 = my_dtmf(0.10, 0.02, 8000, dial_scu);
+testSig3 = my_dtmf(0.50, 0.10, 8000, dial_scu);
+testSig4 = my_dtmf(0.25, 0.05, 8000, [1:12]);
+
+<span class="comment">% Create b697 and b770</span>
+N = 100;
+w = 20;
+fs = 8000;
+fc770 = 770;
+wn770 = [fc770-w, fc770+w]/(fs/2);
+
+fc697 = 852;
+wn697 = [fc697-w, fc697+w]/(fs/2);
+
+b770 = fir1(N, wn770, rectwin(N+1) );
+b697 = fir1(N, wn697, rectwin(N+1) );
+
+y770sig3 = filter(b770, 1, testSig3);
+y697sig3 = filter(b697, 1, testSig3);
+
+figure()
+subplot(3,1,1)
+plot(testSig3)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'Test Signal 3(Unfiltered)'</span>)
+grid <span class="string">on</span>
+
+subplot(3,1,2)
+plot(y770sig3, <span class="string">'red'</span>)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'770 Hz Filter'</span>)
+grid <span class="string">on</span>
+
+subplot(3,1,3)
+plot(y697sig3, <span class="string">'blue'</span>)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'697 Hz Filter'</span>)
+grid <span class="string">on</span>
+
+y770sig2 = filter(b770, 1, testSig2);
+y697sig2 = filter(b697, 1, testSig2);
+
+figure()
+subplot(3,1,1)
+plot(testSig2)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'Test Signal 2(Unfiltered)'</span>)
+grid <span class="string">on</span>
+
+subplot(3,1,2)
+plot(y770sig2, <span class="string">'red'</span>)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'770 Hz Filter'</span>)
+grid <span class="string">on</span>
+
+subplot(3,1,3)
+plot(y697sig2, <span class="string">'blue'</span>)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'697 Hz Filter'</span>)
+grid <span class="string">on</span>
+
+
+<span class="comment">% Our filter does well with most of the signals when we tested both</span>
+<span class="comment">% n=200,400 with 400 having less noisy signals outputted</span>
+
+<span class="comment">% It supressses most of the DTMF tones and leavees us with the tone that</span>
+<span class="comment">% we want.</span>
+
+<span class="comment">% the tones have less delay and as a result some of the noise is filtered</span>
+<span class="comment">% through the delay  period.</span>
+</pre><img vspace="5" hspace="5" src="Lab4_01.png" alt=""> <img vspace="5" hspace="5" src="Lab4_02.png" alt=""> <h2 id="2">Part II:</h2><pre class="codeinput">N = 100/4;
+
+b770 = fir1(N, wn770, rectwin(N+1) );
+b697 = fir1(N, wn697, rectwin(N+1) );
+
+y770sig3 = filter(b770, 1, testSig3);
+y697sig3 = filter(b697, 1, testSig3);
+<span class="comment">% Test Sig2</span>
+
+y770sig2 = filter(b770, 1, testSig2);
+y697sig2 = filter(b697, 1, testSig2);
+
+figure()
+subplot(3,1,1)
+plot(testSig2)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'Test Signal 2(Unfiltered)'</span>)
+grid <span class="string">on</span>
+
+subplot(3,1,2)
+plot(y770sig2, <span class="string">'red'</span>)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'770 Hz Filter'</span>)
+grid <span class="string">on</span>
+
+subplot(3,1,3)
+plot(y697sig2, <span class="string">'blue'</span>)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'697 Hz Filter'</span>)
+grid <span class="string">on</span>
+
+figure()
+subplot(3,1,1)
+plot(testSig3)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'Test Signal 3(Unfiltered)'</span>)
+grid <span class="string">on</span>
+
+subplot(3,1,2)
+plot(y770sig3, <span class="string">'red'</span>)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'770 Hz Filter'</span>)
+grid <span class="string">on</span>
+
+subplot(3,1,3)
+plot(y697sig3, <span class="string">'blue'</span>)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'697 Hz Filter'</span>)
+grid <span class="string">on</span>
+
+<span class="comment">% How do these results compare to Step 1 results?</span>
+<span class="comment">% they are not as effective as previously seen in step 1 because we get</span>
+<span class="comment">% more of the unwanted tones.</span>
+
+
+<span class="comment">%Step 2 part2</span>
+N = 100*2;
+
+b770 = fir1(N, wn770, rectwin(N+1) );
+b697 = fir1(N, wn697, rectwin(N+1) );
+
+y770sig3 = filter(b770, 1, testSig3);
+y697sig3 = filter(b697, 1, testSig3);
+<span class="comment">% Test Sig2</span>
+
+y770sig2 = filter(b770, 1, testSig2);
+y697sig2 = filter(b697, 1, testSig2);
+
+figure()
+subplot(3,1,1)
+plot(testSig2)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'Test Signal 2(Unfiltered)'</span>)
+grid <span class="string">on</span>
+
+subplot(3,1,2)
+plot(y770sig2, <span class="string">'red'</span>)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'770 Hz Filter'</span>)
+grid <span class="string">on</span>
+
+subplot(3,1,3)
+plot(y697sig2, <span class="string">'blue'</span>)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'697 Hz Filter'</span>)
+grid <span class="string">on</span>
+
+figure()
+subplot(3,1,1)
+plot(testSig3)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'Test Signal 3 (Unfiltered)'</span>)
+grid <span class="string">on</span>
+
+subplot(3,1,2)
+plot(y770sig3, <span class="string">'red'</span>)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'770 Hz Filter'</span>)
+grid <span class="string">on</span>
+
+subplot(3,1,3)
+plot(y697sig3, <span class="string">'blue'</span>)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'697 Hz Filter'</span>)
+grid <span class="string">on</span>
+
+<span class="comment">% How do these results compare to Step 1 results? Is there any</span>
+<span class="comment">% noticeable benefit to increasing the length of the filter?</span>
+<span class="comment">% they are more effective than previously seen in step 1 because we get</span>
+<span class="comment">% less of the undesired signal and noise, but not too much to the  point</span>
+<span class="comment">% where more of the unwanted signal is being passed.</span>
+
+
+
+<span class="comment">% Based on these results, would you modify your choices for N and w in your filters?</span>
+<span class="comment">% we would want a value of around 300 with a similar value of w to get</span>
+<span class="comment">% close to the optimal result of our wanted and unwanted tones</span>
+N = 315;
+
+b770 = fir1(N, wn770, rectwin(N+1) );
+b697 = fir1(N, wn697, rectwin(N+1) );
+
+y770sig3 = filter(b770, 1, testSig3);
+y697sig3 = filter(b697, 1, testSig3);
+<span class="comment">% Test Sig2</span>
+
+y770sig2 = filter(b770, 1, testSig2);
+y697sig2 = filter(b697, 1, testSig2);
+
+figure()
+subplot(3,1,1)
+plot(testSig2)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'Test Signal 2(Unfiltered)'</span>)
+grid <span class="string">on</span>
+
+subplot(3,1,2)
+plot(y770sig2, <span class="string">'red'</span>)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'770 Hz Filter'</span>)
+grid <span class="string">on</span>
+
+subplot(3,1,3)
+plot(y697sig2, <span class="string">'blue'</span>)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'697 Hz Filter'</span>)
+grid <span class="string">on</span>
+
+figure()
+subplot(3,1,1)
+plot(testSig3)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'Test Signal 3 (Unfiltered)'</span>)
+grid <span class="string">on</span>
+
+subplot(3,1,2)
+plot(y770sig3, <span class="string">'red'</span>)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'770 Hz Filter'</span>)
+grid <span class="string">on</span>
+
+subplot(3,1,3)
+plot(y697sig3, <span class="string">'blue'</span>)
+xlabel(<span class="string">'Samples (n)'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+title(<span class="string">'697 Hz Filter'</span>)
+grid <span class="string">on</span>
+</pre><img vspace="5" hspace="5" src="Lab4_03.png" alt=""> <img vspace="5" hspace="5" src="Lab4_04.png" alt=""> <img vspace="5" hspace="5" src="Lab4_05.png" alt=""> <img vspace="5" hspace="5" src="Lab4_06.png" alt=""> <img vspace="5" hspace="5" src="Lab4_07.png" alt=""> <img vspace="5" hspace="5" src="Lab4_08.png" alt=""> <h2 id="3">Part 3:</h2><pre class="codeinput">fs = 8000;
+N = 100;
+
+fc697 = 697;
+fc770 = 770;
+fc1336 = 1336;
+
+wn697 = [fc697-w, fc697+w]/(fs/2);
+wn770 = [fc770-w, fc770+w]/(fs/2);
+wn1336 = [fc1336-w, fc1336+w]/(fs/2);
+
+b770  = fir1(N, wn770,  rectwin(N+1) );
+b697  = fir1(N, wn697,  rectwin(N+1) );
+b1336 = fir1(N, wn1336, rectwin(N+1) );
+
+y697sig4 = my_detector(filter(b697,  1, testSig4),500);
+y770sig4 = my_detector(filter(b770,  1, testSig4),500);
+y1336sig4 = my_detector(filter(b1336,  1, testSig4),500);
+
+figure()
+subplot(3,1,1)
+plot(y697sig4)
+title(<span class="string">'697 Hz'</span>)
+
+subplot(3,1,2)
+plot(y770sig4)
+title(<span class="string">'770 Hz'</span>)
+
+subplot(3,1,3)
+plot(y1336sig4)
+title(<span class="string">'1336 Hz'</span>)
+
+<span class="comment">% Test the mydetector function using these filters on testSig4 which contains all the tones and adjust</span>
+<span class="comment">% smoothLength so that the oscillations in the result are less than about 10% of the amplitude. What</span>
+<span class="comment">% happens to the shape and width of the pulses in the output from mydetector when smoothLength is set to a</span>
+<span class="comment">% large number?</span>
+<span class="comment">% When the mydetector function's smoothLengthis set ot a large number, we</span>
+<span class="comment">% get much less osciallation at our peaks for tones and the shape is much</span>
+<span class="comment">% more muted with a more constant line at the amplitude.</span>
+</pre><img vspace="5" hspace="5" src="Lab4_09.png" alt=""> <h2 id="4">5 button</h2><pre class="codeinput">y5 = y1336sig4 .* y770sig4;
+
+figure()
+subplot(4,1,1)
+plot(testSig4)
+title(<span class="string">'TestSig4'</span>)
+
+subplot(4,1,2)
+plot(y770sig4)
+title(<span class="string">'770 Hz'</span>)
+
+subplot(4,1,3)
+plot(y1336sig4)
+title(<span class="string">'1336 Hz'</span>)
+
+subplot(4,1,4)
+plot(y5)
+title(<span class="string">'5 Button'</span>)
+
+<span class="comment">% How well does your detector work?</span>
+<span class="comment">% It works really well when they are multiplied to the value that we are</span>
+<span class="comment">% expecting.</span>
+
+<span class="comment">% What is the lowest value in the pulse indicating the 5 button?</span>
+<span class="comment">% The loswest value is about 0.01</span>
+
+<span class="comment">% How wide is the pulse?</span>
+<span class="comment">% The pulse width is about 2500*10^4</span>
+
+<span class="comment">% What is the highest value in the output when the 5 button is not pressed?</span>
+<span class="comment">% Around 0.02</span>
+
+<span class="comment">% What are your reasons for selecting the values of N, w, and smoothLength that you used for your detector?</span>
+<span class="comment">% We chose N because it was a good medium out of all the given N values, w</span>
+<span class="comment">% seemed appropriate to reuse as was given for the frequency of this lab</span>
+<span class="comment">% and our smoothLenght because it was a sweetspot to detcect fluctuations</span>
+<span class="comment">% or oscillations without muting the behaviour of our signal.</span>
+
+<span class="comment">% In the design process for this lab, we tried to suppress nearby row and column frequencies by a large</span>
+<span class="comment">% factor. However, your detector might still work reliably with less attenuation of nearby DTMF</span>
+<span class="comment">% frequencies. Considering your complete system, the DTMF tone filters followed by the mydetector</span>
+<span class="comment">% function, followed by your decision method, how much attenuation of nearby DTMF frequencies is</span>
+<span class="comment">% needed for reliable operation?</span>
+<span class="comment">% Attenuation is needed to the point where there is a sweet spot of</span>
+<span class="comment">% resembling the proper signal figure without too much oscillation or too</span>
+<span class="comment">% little aka muted.</span>
+</pre><img vspace="5" hspace="5" src="Lab4_10.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Lab 4
+%% Part I:
+dial_scu = [3 5 7 11] ;
+
+testSig1 = my_dtmf(0.25, 0.05, 8000, dial_scu);
+testSig2 = my_dtmf(0.10, 0.02, 8000, dial_scu);
+testSig3 = my_dtmf(0.50, 0.10, 8000, dial_scu);
+testSig4 = my_dtmf(0.25, 0.05, 8000, [1:12]);
+
+% Create b697 and b770
+N = 100;
+w = 20;
+fs = 8000;
+fc770 = 770;
+wn770 = [fc770-w, fc770+w]/(fs/2);
+
+fc697 = 852;
+wn697 = [fc697-w, fc697+w]/(fs/2);
+
+b770 = fir1(N, wn770, rectwin(N+1) );
+b697 = fir1(N, wn697, rectwin(N+1) );
+
+y770sig3 = filter(b770, 1, testSig3);
+y697sig3 = filter(b697, 1, testSig3);
+
+figure()
+subplot(3,1,1)
+plot(testSig3)
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('Test Signal 3(Unfiltered)')
+grid on
+
+subplot(3,1,2)
+plot(y770sig3, 'red')
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('770 Hz Filter')
+grid on
+
+subplot(3,1,3)
+plot(y697sig3, 'blue')
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('697 Hz Filter')
+grid on
+
+y770sig2 = filter(b770, 1, testSig2);
+y697sig2 = filter(b697, 1, testSig2);
+
+figure()
+subplot(3,1,1)
+plot(testSig2)
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('Test Signal 2(Unfiltered)')
+grid on
+
+subplot(3,1,2)
+plot(y770sig2, 'red')
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('770 Hz Filter')
+grid on
+
+subplot(3,1,3)
+plot(y697sig2, 'blue')
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('697 Hz Filter')
+grid on
+
+
+% Our filter does well with most of the signals when we tested both
+% n=200,400 with 400 having less noisy signals outputted
+
+% It supressses most of the DTMF tones and leavees us with the tone that
+% we want.
+
+% the tones have less delay and as a result some of the noise is filtered
+% through the delay  period.
+
+
+%% Part II:
+N = 100/4;
+
+b770 = fir1(N, wn770, rectwin(N+1) );
+b697 = fir1(N, wn697, rectwin(N+1) );
+
+y770sig3 = filter(b770, 1, testSig3);
+y697sig3 = filter(b697, 1, testSig3);
+% Test Sig2
+
+y770sig2 = filter(b770, 1, testSig2);
+y697sig2 = filter(b697, 1, testSig2);
+
+figure()
+subplot(3,1,1)
+plot(testSig2)
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('Test Signal 2(Unfiltered)')
+grid on
+
+subplot(3,1,2)
+plot(y770sig2, 'red')
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('770 Hz Filter')
+grid on
+
+subplot(3,1,3)
+plot(y697sig2, 'blue')
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('697 Hz Filter')
+grid on
+
+figure()
+subplot(3,1,1)
+plot(testSig3)
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('Test Signal 3(Unfiltered)')
+grid on
+
+subplot(3,1,2)
+plot(y770sig3, 'red')
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('770 Hz Filter')
+grid on
+
+subplot(3,1,3)
+plot(y697sig3, 'blue')
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('697 Hz Filter')
+grid on
+
+% How do these results compare to Step 1 results?
+% they are not as effective as previously seen in step 1 because we get
+% more of the unwanted tones.
+
+
+%Step 2 part2
+N = 100*2;
+
+b770 = fir1(N, wn770, rectwin(N+1) );
+b697 = fir1(N, wn697, rectwin(N+1) );
+
+y770sig3 = filter(b770, 1, testSig3);
+y697sig3 = filter(b697, 1, testSig3);
+% Test Sig2
+
+y770sig2 = filter(b770, 1, testSig2);
+y697sig2 = filter(b697, 1, testSig2);
+
+figure()
+subplot(3,1,1)
+plot(testSig2)
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('Test Signal 2(Unfiltered)')
+grid on
+
+subplot(3,1,2)
+plot(y770sig2, 'red')
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('770 Hz Filter')
+grid on
+
+subplot(3,1,3)
+plot(y697sig2, 'blue')
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('697 Hz Filter')
+grid on
+
+figure()
+subplot(3,1,1)
+plot(testSig3)
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('Test Signal 3 (Unfiltered)')
+grid on
+
+subplot(3,1,2)
+plot(y770sig3, 'red')
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('770 Hz Filter')
+grid on
+
+subplot(3,1,3)
+plot(y697sig3, 'blue')
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('697 Hz Filter')
+grid on
+
+% How do these results compare to Step 1 results? Is there any
+% noticeable benefit to increasing the length of the filter?
+% they are more effective than previously seen in step 1 because we get
+% less of the undesired signal and noise, but not too much to the  point
+% where more of the unwanted signal is being passed.
+
+
+
+% Based on these results, would you modify your choices for N and w in your filters?
+% we would want a value of around 300 with a similar value of w to get
+% close to the optimal result of our wanted and unwanted tones
+N = 315;
+
+b770 = fir1(N, wn770, rectwin(N+1) );
+b697 = fir1(N, wn697, rectwin(N+1) );
+
+y770sig3 = filter(b770, 1, testSig3);
+y697sig3 = filter(b697, 1, testSig3);
+% Test Sig2
+
+y770sig2 = filter(b770, 1, testSig2);
+y697sig2 = filter(b697, 1, testSig2);
+
+figure()
+subplot(3,1,1)
+plot(testSig2)
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('Test Signal 2(Unfiltered)')
+grid on
+
+subplot(3,1,2)
+plot(y770sig2, 'red')
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('770 Hz Filter')
+grid on
+
+subplot(3,1,3)
+plot(y697sig2, 'blue')
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('697 Hz Filter')
+grid on
+
+figure()
+subplot(3,1,1)
+plot(testSig3)
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('Test Signal 3 (Unfiltered)')
+grid on
+
+subplot(3,1,2)
+plot(y770sig3, 'red')
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('770 Hz Filter')
+grid on
+
+subplot(3,1,3)
+plot(y697sig3, 'blue')
+xlabel('Samples (n)')
+ylabel('Magnitude')
+title('697 Hz Filter')
+grid on
+
+%% Part 3:
+fs = 8000;
+N = 100;
+
+fc697 = 697;
+fc770 = 770;
+fc1336 = 1336;
+
+wn697 = [fc697-w, fc697+w]/(fs/2);
+wn770 = [fc770-w, fc770+w]/(fs/2);
+wn1336 = [fc1336-w, fc1336+w]/(fs/2);
+
+b770  = fir1(N, wn770,  rectwin(N+1) );
+b697  = fir1(N, wn697,  rectwin(N+1) );
+b1336 = fir1(N, wn1336, rectwin(N+1) );
+
+y697sig4 = my_detector(filter(b697,  1, testSig4),500);
+y770sig4 = my_detector(filter(b770,  1, testSig4),500);
+y1336sig4 = my_detector(filter(b1336,  1, testSig4),500);
+
+figure()
+subplot(3,1,1)
+plot(y697sig4)
+title('697 Hz')
+
+subplot(3,1,2)
+plot(y770sig4)
+title('770 Hz')
+
+subplot(3,1,3)
+plot(y1336sig4)
+title('1336 Hz')
+
+% Test the mydetector function using these filters on testSig4 which contains all the tones and adjust
+% smoothLength so that the oscillations in the result are less than about 10% of the amplitude. What
+% happens to the shape and width of the pulses in the output from mydetector when smoothLength is set to a
+% large number?
+% When the mydetector function's smoothLengthis set ot a large number, we
+% get much less osciallation at our peaks for tones and the shape is much
+% more muted with a more constant line at the amplitude.
+%% 5 button
+y5 = y1336sig4 .* y770sig4;
+
+figure()
+subplot(4,1,1)
+plot(testSig4)
+title('TestSig4')
+
+subplot(4,1,2)
+plot(y770sig4)
+title('770 Hz')
+
+subplot(4,1,3)
+plot(y1336sig4)
+title('1336 Hz')
+
+subplot(4,1,4)
+plot(y5)
+title('5 Button')
+
+% How well does your detector work? 
+% It works really well when they are multiplied to the value that we are
+% expecting.
+
+% What is the lowest value in the pulse indicating the 5 button? 
+% The loswest value is about 0.01
+
+% How wide is the pulse? 
+% The pulse width is about 2500*10^4
+
+% What is the highest value in the output when the 5 button is not pressed? 
+% Around 0.02
+
+% What are your reasons for selecting the values of N, w, and smoothLength that you used for your detector?
+% We chose N because it was a good medium out of all the given N values, w
+% seemed appropriate to reuse as was given for the frequency of this lab
+% and our smoothLenght because it was a sweetspot to detcect fluctuations
+% or oscillations without muting the behaviour of our signal.
+
+% In the design process for this lab, we tried to suppress nearby row and column frequencies by a large
+% factor. However, your detector might still work reliably with less attenuation of nearby DTMF
+% frequencies. Considering your complete system, the DTMF tone filters followed by the mydetector
+% function, followed by your decision method, how much attenuation of nearby DTMF frequencies is
+% needed for reliable operation?
+% Attenuation is needed to the point where there is a sweet spot of
+% resembling the proper signal figure without too much oscillation or too
+% little aka muted.
+##### SOURCE END #####
+--></body></html>

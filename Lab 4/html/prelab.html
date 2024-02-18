@@ -1,0 +1,324 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>prelab</title><meta name="generator" content="MATLAB 9.8"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-04-21"><meta name="DC.source" content="prelab.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">ELEN 133L Prelab 4</a></li><li><a href="#2">Step 5</a></li><li><a href="#3">Step 6</a></li></ul></div><h2 id="1">ELEN 133L Prelab 4</h2><pre class="codeinput">clc
+clear <span class="string">all</span>
+close <span class="string">all</span>
+
+<span class="comment">% Given parameters</span>
+N = 100;
+w = 80;
+fs = 8000;
+
+fc770 = 770;
+fc697 = 697;
+
+wn770 = [fc770-w, fc770+w]/(fs/2);
+wn697 = [fc697-w, fc697+w]/(fs/2);
+
+b770 = fir1(N, wn770, rectwin(N+1) );
+b697 = fir1(N, wn697, rectwin(N+1) );
+[H770, fv] = freqz(b770,1,N,fs);
+[H697, fv] = freqz(b697,1,N,fs);
+
+<span class="comment">% Plotting</span>
+figure(1)
+plot(fv,abs(H770))
+title(<span class="string">'H770'</span>)
+
+<span class="comment">% The magnitude of the fr is about 1 at 770 Hz.</span>
+<span class="comment">% The magnitude of the fr is about 0.4 at 851Hz.</span>
+<span class="comment">% The magnitude of the fr is about 0.4 at 698 Hz.</span>
+
+<span class="comment">% Below 770Hz, the plot first hits around zero at 640Hz.</span>
+<span class="comment">% Above 770Hz, the plot first hits around zero at 1000Hz</span>
+<span class="comment">% Plotting the one sided spectra for both 770 and 697</span>
+figure(2)
+subplot(2,1,1)
+hold <span class="string">on</span>
+plot(b770,<span class="string">'-b'</span>)
+plot(b697,<span class="string">'-r'</span>)
+hold <span class="string">off</span>
+title(<span class="string">'Impulse Response of b770 and b697 Signal'</span>)
+legend(<span class="string">'H770'</span>,<span class="string">'H697'</span>)
+subplot(2,1,2)
+plot(fv, abs(H697),<span class="string">'-r'</span>, fv, abs(H770),<span class="string">'-b'</span>)
+title(<span class="string">'Frequency Response, N1 = 100, w = 80'</span>)
+legend(<span class="string">'H697'</span>,<span class="string">'H770'</span>)
+</pre><img vspace="5" hspace="5" src="prelab_01.png" alt=""> <img vspace="5" hspace="5" src="prelab_02.png" alt=""> <h2 id="2">Step 5</h2><pre class="codeinput">N=100;
+w = 40;
+
+wn770 = [fc770-w, fc770+w]/(fs/2);
+wn697 = [fc697-w, fc697+w]/(fs/2);
+b770 = fir1(N, wn770, rectwin(N+1) );
+b697 = fir1(N, wn697, rectwin(N+1) );
+[H770, fv] = freqz(b770,1,N,fs);
+[H697, fv] = freqz(b697,1,N,fs);
+
+figure(3)
+subplot(2,1,1)
+hold <span class="string">on</span>
+plot(b770,<span class="string">'-b'</span>)
+plot(b697,<span class="string">'-r'</span>)
+hold <span class="string">off</span>
+title(<span class="string">'Impulse Response of b770 and b697 Signal'</span>)
+legend(<span class="string">'H770'</span>,<span class="string">'H697'</span>)
+
+subplot(2,1,2)
+plot(fv, abs(H697),<span class="string">'-r'</span>, fv, abs(H770),<span class="string">'-b'</span>)
+title(<span class="string">'Frequency Response, N1 = 100, w = 40'</span>)
+legend(<span class="string">'H697'</span>,<span class="string">'H770'</span>)
+<span class="comment">% Each peak is at a defined value but there is a lot of overlap.</span>
+
+N = 100;
+w = 20;
+
+wn770 = [fc770-w, fc770+w]/(fs/2);
+wn697 = [fc697-w, fc697+w]/(fs/2);
+b770 = fir1(N, wn770, rectwin(N+1) );
+b697 = fir1(N, wn697, rectwin(N+1) );
+[H770, fv] = freqz(b770,1,N,fs);
+[H697, fv] = freqz(b697,1,N,fs);
+
+figure(4)
+subplot(2,1,1)
+hold <span class="string">on</span>
+plot(b770,<span class="string">'-b'</span>)
+plot(b697,<span class="string">'-r'</span>)
+hold <span class="string">off</span>
+title(<span class="string">'Impulse Response of b770 and b697 Signal'</span>)
+legend(<span class="string">'H770'</span>,<span class="string">'H697'</span>)
+subplot(2,1,2)
+plot(fv, abs(H697),<span class="string">'-r'</span>, fv, abs(H770),<span class="string">'-b'</span>)
+title(<span class="string">'Frequency Response, N1 = 100, w = 20'</span>)
+legend(<span class="string">'H697'</span>,<span class="string">'H770'</span>)
+<span class="comment">% Each peak is at a defined value but there is a lot of overlap.</span>
+
+N = 200;
+w = 20;
+
+wn770 = [fc770-w, fc770+w]/(fs/2);
+wn697 = [fc697-w, fc697+w]/(fs/2);
+b770 = fir1(N, wn770, rectwin(N+1) );
+b697 = fir1(N, wn697, rectwin(N+1) );
+[H770, fv] = freqz(b770,1,N,fs);
+[H697, fv] = freqz(b697,1,N,fs);
+
+figure(5)
+subplot(2,1,1)
+hold <span class="string">on</span>
+plot(b770,<span class="string">'-b'</span>)
+plot(b697,<span class="string">'-r'</span>)
+hold <span class="string">off</span>
+title(<span class="string">'Impulse Response of b770 and b697 Signal'</span>)
+legend(<span class="string">'H770'</span>,<span class="string">'H697'</span>)
+subplot(2,1,2)
+plot(fv, abs(H697),<span class="string">'-r'</span>, fv, abs(H770),<span class="string">'-b'</span>)
+title(<span class="string">'Frequency Response, N1 = 200, w = 20'</span>)
+legend(<span class="string">'H697'</span>,<span class="string">'H770'</span>)
+<span class="comment">% Each peak is at a defined value but there is a lot of overlap.</span>
+</pre><img vspace="5" hspace="5" src="prelab_03.png" alt=""> <img vspace="5" hspace="5" src="prelab_04.png" alt=""> <img vspace="5" hspace="5" src="prelab_05.png" alt=""> <img vspace="5" hspace="5" src="prelab_06.png" alt=""> <h2 id="3">Step 6</h2><p>Compare the results of Steps 4 and 5 with respect to the filter&#8217;s ability to suppress one of the tones. What is the effect of reducing w? What is the effect of increasing N? Chose a set of values for N and w that you think would be the best to use in filters that would reliably distinguish the row 2 tone from the row 1 tone and j</p><pre class="codeinput"><span class="comment">%Increasing 2 makes it much more stable while increase n increases the</span>
+<span class="comment">%accuracy of perception as we take more samples. I think 150 and 2 would be</span>
+<span class="comment">%great.</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% ELEN 133L Prelab 4
+clc
+clear all
+close all
+
+% Given parameters
+N = 100;
+w = 80;
+fs = 8000;
+
+fc770 = 770;
+fc697 = 697;
+
+wn770 = [fc770-w, fc770+w]/(fs/2);
+wn697 = [fc697-w, fc697+w]/(fs/2);
+
+b770 = fir1(N, wn770, rectwin(N+1) );
+b697 = fir1(N, wn697, rectwin(N+1) );
+[H770, fv] = freqz(b770,1,N,fs);
+[H697, fv] = freqz(b697,1,N,fs);
+
+% Plotting
+figure(1)
+plot(fv,abs(H770))
+title('H770')
+
+% The magnitude of the fr is about 1 at 770 Hz.
+% The magnitude of the fr is about 0.4 at 851Hz.
+% The magnitude of the fr is about 0.4 at 698 Hz.
+
+% Below 770Hz, the plot first hits around zero at 640Hz.
+% Above 770Hz, the plot first hits around zero at 1000Hz
+% Plotting the one sided spectra for both 770 and 697
+figure(2)
+subplot(2,1,1)
+hold on
+plot(b770,'-b')
+plot(b697,'-r')
+hold off
+title('Impulse Response of b770 and b697 Signal')
+legend('H770','H697')
+subplot(2,1,2)
+plot(fv, abs(H697),'-r', fv, abs(H770),'-b')
+title('Frequency Response, N1 = 100, w = 80')
+legend('H697','H770')
+
+%% Step 5
+N=100;
+w = 40;
+
+wn770 = [fc770-w, fc770+w]/(fs/2);
+wn697 = [fc697-w, fc697+w]/(fs/2);
+b770 = fir1(N, wn770, rectwin(N+1) );
+b697 = fir1(N, wn697, rectwin(N+1) );
+[H770, fv] = freqz(b770,1,N,fs);
+[H697, fv] = freqz(b697,1,N,fs);
+
+figure(3)
+subplot(2,1,1)
+hold on
+plot(b770,'-b')
+plot(b697,'-r')
+hold off
+title('Impulse Response of b770 and b697 Signal')
+legend('H770','H697')
+
+subplot(2,1,2)
+plot(fv, abs(H697),'-r', fv, abs(H770),'-b')
+title('Frequency Response, N1 = 100, w = 40')
+legend('H697','H770')
+% Each peak is at a defined value but there is a lot of overlap.
+
+N = 100;
+w = 20;
+
+wn770 = [fc770-w, fc770+w]/(fs/2);
+wn697 = [fc697-w, fc697+w]/(fs/2);
+b770 = fir1(N, wn770, rectwin(N+1) );
+b697 = fir1(N, wn697, rectwin(N+1) );
+[H770, fv] = freqz(b770,1,N,fs);
+[H697, fv] = freqz(b697,1,N,fs);
+
+figure(4)
+subplot(2,1,1)
+hold on
+plot(b770,'-b')
+plot(b697,'-r')
+hold off
+title('Impulse Response of b770 and b697 Signal')
+legend('H770','H697')
+subplot(2,1,2)
+plot(fv, abs(H697),'-r', fv, abs(H770),'-b')
+title('Frequency Response, N1 = 100, w = 20')
+legend('H697','H770')
+% Each peak is at a defined value but there is a lot of overlap.
+
+N = 200;
+w = 20;
+
+wn770 = [fc770-w, fc770+w]/(fs/2);
+wn697 = [fc697-w, fc697+w]/(fs/2);
+b770 = fir1(N, wn770, rectwin(N+1) );
+b697 = fir1(N, wn697, rectwin(N+1) );
+[H770, fv] = freqz(b770,1,N,fs);
+[H697, fv] = freqz(b697,1,N,fs);
+
+figure(5)
+subplot(2,1,1)
+hold on
+plot(b770,'-b')
+plot(b697,'-r')
+hold off
+title('Impulse Response of b770 and b697 Signal')
+legend('H770','H697')
+subplot(2,1,2)
+plot(fv, abs(H697),'-r', fv, abs(H770),'-b')
+title('Frequency Response, N1 = 200, w = 20')
+legend('H697','H770')
+% Each peak is at a defined value but there is a lot of overlap.
+
+%% Step 6
+% Compare the results of Steps 4 and 5 with respect to the filter’s ability to suppress one of the
+% tones. What is the effect of reducing w? What is the effect of increasing N? Chose a set of values
+% for N and w that you think would be the best to use in filters that would reliably distinguish the
+% row 2 tone from the row 1 tone and j
+
+%Increasing 2 makes it much more stable while increase n increases the
+%accuracy of perception as we take more samples. I think 150 and 2 would be
+%great.
+
+
+
+##### SOURCE END #####
+--></body></html>

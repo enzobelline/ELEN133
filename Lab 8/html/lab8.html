@@ -1,0 +1,619 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>lab8</title><meta name="generator" content="MATLAB 9.8"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-05-25"><meta name="DC.source" content="lab8.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Step 2</a></li><li><a href="#3">Step 3</a></li><li><a href="#4">Step 4</a></li></ul></div><pre class="codeinput">close <span class="string">all</span>
+clear
+clc
+
+<span class="comment">%%Step 1</span>
+h1 = [1 2 1];
+h2 = [1 0 -1];
+h3 = conv(h1,h2);
+h4 = conv(h1,h3,<span class="string">'full'</span>);
+h3l = h3';
+hA = h1'*h1;
+hB = h2'*h1;
+hC = h3'*h3;
+hD = h4'*h4;
+hL = fspecial(<span class="string">'laplacian'</span>,0.0);
+
+A1 = zeros(16);
+A1(5:11,5:11) = ones(7);
+
+figure()
+mesh(A1);
+title(<span class="string">'A1'</span>)
+
+AA  = conv2(hA,A1);
+AB  = conv2(hB,A1);
+ABB = conv2(hB',A1);
+AC  = conv2(hC,A1);
+AD  = conv2(hD,A1);
+AL  = conv2(hL,A1);
+
+
+figure();
+mesh(AA);
+title(<span class="string">'AA  = conv2(hA,A1);'</span>)
+
+figure();
+mesh(AB);
+title(<span class="string">'AB  = conv2(hB,A1);'</span>)
+
+figure();
+mesh(ABB);
+title(<span class="string">'ABB = conv2(hB'',A1);'</span>);
+
+figure();
+mesh(AC);
+title(<span class="string">'AC  = conv2(hC,A1);'</span>)
+
+figure();
+mesh(AD);
+title(<span class="string">'AD  = conv2(hD,A1);'</span>)
+
+figure();
+mesh(AL);
+title(<span class="string">'AL  = conv2(hL,A1);'</span>)
+
+<span class="comment">% Checkpoint 1: Show your results to your lab assistant and discuss questions.</span>
+<span class="comment">% Step 1</span>
+<span class="comment">% hA, hB, hC:hA = h1'*h1;hB = h2'*h1;hC = h3'*h3;</span>
+
+<span class="comment">% What is the size of A1? 16 x 16 double array</span>
+
+<span class="comment">% Describe the effect of the filters on the input array.</span>
+<span class="comment">% Depending on the values in the matrix, the input arrays magnitude gets</span>
+<span class="comment">% shifted to reflect the matrix that it is convoluted with</span>
+
+<span class="comment">% Verify that using hB for the filter produces the same result as using the column and row vectors h2&#8217; and</span>
+<span class="comment">% h1 for the filter definition with conv2(h2&#8217;,h1,A1).</span>
+<span class="comment">% Verified as seen in the graph in the report.</span>
+
+<span class="comment">% What is the size of the output arrays?</span>
+<span class="comment">% h3&#8217; and h3:5x1 array 1x5 array respectively</span>
+
+<span class="comment">% Describe the effect of this filter on the input array</span>
+<span class="comment">% h4:</span>
+<span class="comment">% The effect of the filter is that as the array [1 4 5 0 -5 -4 -1] gets</span>
+<span class="comment">% convoluted against itself and then is convoluted against a1 the magnitude</span>
+<span class="comment">% of the input array reflects the values of the convoluted values.</span>
+
+<span class="comment">% Compare this result to the previous result using h3.</span>
+<span class="comment">% Laplacian:</span>
+<span class="comment">% What is the size of this filter?</span>
+<span class="comment">% 3x3 array</span>
+
+<span class="comment">% Write the filter values of the 2D filter array.</span>
+<span class="comment">% [0,1,0;1,-4,1;0,1,0]</span>
+
+<span class="comment">% Convolve this filter with A1 and display it with mesh. How is this result different from filtering with hB or</span>
+<span class="comment">% hB&#8217;?</span>
+<span class="comment">% This result is different because it doesnt just take into acount the</span>
+<span class="comment">% horizontal or vertical edges and outlines the figure itself.</span>
+</pre><img vspace="5" hspace="5" src="lab8_01.png" alt=""> <img vspace="5" hspace="5" src="lab8_02.png" alt=""> <img vspace="5" hspace="5" src="lab8_03.png" alt=""> <img vspace="5" hspace="5" src="lab8_04.png" alt=""> <img vspace="5" hspace="5" src="lab8_05.png" alt=""> <img vspace="5" hspace="5" src="lab8_06.png" alt=""> <img vspace="5" hspace="5" src="lab8_07.png" alt=""> <h2 id="2">Step 2</h2><pre class="codeinput">i1 = imread(<span class="string">'4.1.05.tiff'</span>);
+
+figure();
+imshow(i1);
+
+i1grey = rgb2gray(i1);
+s3 = h3/16;
+i1_s3 = conv2(s3',s3,i1grey);
+
+figure();
+imshow(i1_s3);
+
+hs = ones(2,40)/80;
+ilg_hs = conv2(hs, i1grey);
+
+figure();
+imshow(ilg_hs,[]);
+
+hm = fspecial(<span class="string">'motion'</span>,41,30);
+ilg_hm = conv2(hm,i1grey);
+
+figure();
+imshow(ilg_hm,[]);
+
+<span class="comment">%{
+</span><span class="comment">Checkpoint 2: Show your results to your lab assistant and discuss questions.
+</span><span class="comment">Step 2
+</span><span class="comment">scaled smoothing filter s3 = h3/16:260x260 double
+</span><span class="comment">Compare this display to the input image. Identify some areas in this smoothed image that have less
+</span><span class="comment">sharp detail than the input image.
+</span><span class="comment">the new image is sharper on edges however there are locations such as the
+</span><span class="comment">door and the gutter as well as the windows that are smoother because there
+</span><span class="comment">wasn't as much of a contrast as before
+</span><span class="comment">
+</span><span class="comment">2D smoothing filter with different smoothing in the horizontal and vertical
+</span><span class="comment">directions with hS = ones(2,40)/80. Use full range display
+</span><span class="comment">What is the effect of this filter?257x295 double
+</span><span class="comment">This filter just the horizontal outlines to smooth the edges
+</span><span class="comment">
+</span><span class="comment">motion blur filter: use full range display
+</span><span class="comment">What is the size of this filter? 276x292 double
+</span><span class="comment">Convolve this filter with i1grey and display it. What is the effect of this filter?
+</span><span class="comment">How does it compare to the previous output image?
+</span><span class="comment">This filter blurs the horizontal and vertical to smooth the edges
+</span><span class="comment">%}</span>
+</pre><img vspace="5" hspace="5" src="lab8_08.png" alt=""> <img vspace="5" hspace="5" src="lab8_09.png" alt=""> <img vspace="5" hspace="5" src="lab8_10.png" alt=""> <img vspace="5" hspace="5" src="lab8_11.png" alt=""> <h2 id="3">Step 3</h2><pre class="codeinput">i1g_hb  = conv2(hB ,i1grey);
+i1g_hbt = conv2(hB',i1grey);
+
+figure();
+imshow(i1g_hb);
+
+figure();
+imshow(i1g_hbt);
+
+figure();
+imshow(i1g_hb,[]);
+
+figure();
+imshow(i1g_hbt,[]);
+
+i1g_h1 = conv2(h1,i1grey);
+
+figure();
+imshow(i1g_h1,[]);
+
+edge1 = edge(i1grey);
+imshow(edge1);
+
+i2 = imread(<span class="string">'eight.tif'</span>);
+i2_hB = conv2(hB, i2);
+i2_hBt = conv2(hB',i2);
+
+figure();
+imshow(i2_hB);
+
+figure();
+imshow(i2_hBt);
+
+figure();
+imshow(i2_hB,[]);
+
+figure();
+imshow(i2_hBt);
+
+figure();
+imshow(i2_hBt, []);
+
+i2_h1 = conv2(h1,i2);
+figure();
+imshow(i2_h1,[]);
+edge2 = edge(i2);
+imshow(edge2);
+
+<span class="comment">%{
+</span><span class="comment">Step 3
+</span><span class="comment">Full range display: Redisplay the two images with imshow(imout, []) and compare the two displays.
+</span><span class="comment">Which one emphasizes vertical edges?
+</span><span class="comment">i1g_hb  = conv2(hB ,i1grey) emphasizes vertical edges.
+</span><span class="comment">
+</span><span class="comment">Which one emphasizes horizontal edges?
+</span><span class="comment">i1g_hbt  = conv2(hB' ,i1grey) emphasizes horizontal edges.
+</span><span class="comment">
+</span><span class="comment">Is this consistent with the output you observed in Step 1 using the 2D array A1 as the input?
+</span><span class="comment">Yes.
+</span><span class="comment">
+</span><span class="comment">Edge filter:
+</span><span class="comment">How are the displayed edge segments related to the filtered outputs using hB and hB&#8217;?
+</span><span class="comment">
+</span><span class="comment">The displayed edge segments are shown as modified edges that can be
+</span><span class="comment">interpreted as post-filter processing. Whatever the filter processing may
+</span><span class="comment">be hB emphasizing vertical edges and hB&#8217; emphasizing horizontal edges.
+</span><span class="comment">
+</span><span class="comment">%}</span>
+</pre><img vspace="5" hspace="5" src="lab8_12.png" alt=""> <img vspace="5" hspace="5" src="lab8_13.png" alt=""> <img vspace="5" hspace="5" src="lab8_14.png" alt=""> <img vspace="5" hspace="5" src="lab8_15.png" alt=""> <img vspace="5" hspace="5" src="lab8_16.png" alt=""> <img vspace="5" hspace="5" src="lab8_17.png" alt=""> <img vspace="5" hspace="5" src="lab8_18.png" alt=""> <img vspace="5" hspace="5" src="lab8_19.png" alt=""> <img vspace="5" hspace="5" src="lab8_20.png" alt=""> <img vspace="5" hspace="5" src="lab8_21.png" alt=""> <img vspace="5" hspace="5" src="lab8_22.png" alt=""> <img vspace="5" hspace="5" src="lab8_23.png" alt=""> <h2 id="4">Step 4</h2><pre class="codeinput">inoise = 128*rand(80) + 128;
+hg1 = fspecial(<span class="string">'gaussian'</span>,5 ,0.5);
+hg2 = fspecial(<span class="string">'gaussian'</span>,15,2.0);
+hg3 = fspecial(<span class="string">'gaussian'</span>,25,4.0);
+
+ihg1 = conv2(hg1,inoise);
+ihg2 = conv2(hg2,inoise);
+ihg3 = conv2(hg3,inoise);
+
+figure()
+subplot(2,2,1);
+imshow(inoise,[])
+subplot(2,2,2);
+imshow(ihg1,[])
+subplot(2,2,3);
+imshow(ihg2,[])
+subplot(2,2,4);
+imshow(ihg3,[])
+
+hL2 = [0,-1,0 ; -1,5,-1 ; 0,-1,0];
+
+<span class="keyword">for</span> V = [0 20 40]
+    i1noise = double(i1grey) + V*randn(size(i1grey));
+    ihg1 = conv2(hg1,i1noise);
+    ihg2 = conv2(hg2,i1noise);
+    ihg3 = conv2(hg3,i1noise);
+    ihL2 = conv2(hL2,i1noise);
+
+    figure()
+    subplot(3,2,1);
+    imshow(i1noise,[])
+    subplot(3,2,2);
+    imshow(ihg1,[])
+    subplot(3,2,3);
+    imshow(ihg2,[])
+    subplot(3,2,4);
+    imshow(ihg3,[])
+    subplot(3,2,5);
+    imshow(ihL2,[]);
+<span class="keyword">end</span>
+<span class="comment">%{
+</span><span class="comment">Step 4
+</span><span class="comment">Gaussian smoothing filters of different sizes: Describe the appearance of the images.
+</span><span class="comment">As we increase in value of the smoothing filters, the noise is reduced in
+</span><span class="comment">our final image. The outlines of our image also gets increasingly bolder as
+</span><span class="comment">well.
+</span><span class="comment">
+</span><span class="comment">What is the effect of the smoothing on the random noise patterns?
+</span><span class="comment">The effect of the smoothing on the random noise patterns feels like it
+</span><span class="comment">generalizes the picture more regardless of the added noise.
+</span><span class="comment">
+</span><span class="comment">Add noise to i1grey and determine the best smoothing filter to reduce the impact of the noise:
+</span><span class="comment">When the noise level V is 0, what is the effect of each of the three Gaussian filters?
+</span><span class="comment">The effect of the three gaussian filters is standard in comparison to
+</span><span class="comment">the expected effect that we see in the first figure.
+</span><span class="comment">
+</span><span class="comment">How well defined are the edges and corners in the sharpened output?
+</span><span class="comment">The edges and the corners are well defined in comparison to the other
+</span><span class="comment">duller regions.
+</span><span class="comment">
+</span><span class="comment">For the two other values of V, what amount of smoothing do you think makes the best output image
+</span><span class="comment">and why did you choose that level?
+</span><span class="comment">20 bedcause 40 intoduces a lot more noise.
+</span><span class="comment">
+</span><span class="comment">What happens to the sharpened output when there is noise in the image?
+</span><span class="comment">The sharpened output is realtively the same. for the hL filter but
+</span><span class="comment">definitely noisier and messier for the hg1,2,3 filters.
+</span><span class="comment">%}</span>
+</pre><img vspace="5" hspace="5" src="lab8_24.png" alt=""> <img vspace="5" hspace="5" src="lab8_25.png" alt=""> <img vspace="5" hspace="5" src="lab8_26.png" alt=""> <img vspace="5" hspace="5" src="lab8_27.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+close all 
+clear
+clc
+
+%%Step 1
+h1 = [1 2 1];
+h2 = [1 0 -1];
+h3 = conv(h1,h2);
+h4 = conv(h1,h3,'full');
+h3l = h3'; 
+hA = h1'*h1;
+hB = h2'*h1;
+hC = h3'*h3;
+hD = h4'*h4;
+hL = fspecial('laplacian',0.0);
+
+A1 = zeros(16);
+A1(5:11,5:11) = ones(7);
+
+figure()
+mesh(A1);
+title('A1')
+
+AA  = conv2(hA,A1);
+AB  = conv2(hB,A1);
+ABB = conv2(hB',A1);
+AC  = conv2(hC,A1);
+AD  = conv2(hD,A1);
+AL  = conv2(hL,A1);
+
+
+figure();
+mesh(AA);
+title('AA  = conv2(hA,A1);')
+
+figure();
+mesh(AB);
+title('AB  = conv2(hB,A1);')
+
+figure();
+mesh(ABB);
+title('ABB = conv2(hB'',A1);');
+
+figure();
+mesh(AC);
+title('AC  = conv2(hC,A1);')
+
+figure();
+mesh(AD);
+title('AD  = conv2(hD,A1);')
+
+figure();
+mesh(AL);
+title('AL  = conv2(hL,A1);')
+
+% Checkpoint 1: Show your results to your lab assistant and discuss questions.
+% Step 1
+% hA, hB, hC:hA = h1'*h1;hB = h2'*h1;hC = h3'*h3;
+
+% What is the size of A1? 16 x 16 double array
+
+% Describe the effect of the filters on the input array.
+% Depending on the values in the matrix, the input arrays magnitude gets 
+% shifted to reflect the matrix that it is convoluted with
+
+% Verify that using hB for the filter produces the same result as using the column and row vectors h2’ and
+% h1 for the filter definition with conv2(h2’,h1,A1). 
+% Verified as seen in the graph in the report.
+
+% What is the size of the output arrays?
+% h3’ and h3:5x1 array 1x5 array respectively
+
+% Describe the effect of this filter on the input array
+% h4:
+% The effect of the filter is that as the array [1 4 5 0 -5 -4 -1] gets
+% convoluted against itself and then is convoluted against a1 the magnitude
+% of the input array reflects the values of the convoluted values. 
+
+% Compare this result to the previous result using h3.
+% Laplacian:
+% What is the size of this filter?
+% 3x3 array
+
+% Write the filter values of the 2D filter array.
+% [0,1,0;1,-4,1;0,1,0]
+
+% Convolve this filter with A1 and display it with mesh. How is this result different from filtering with hB or
+% hB’?
+% This result is different because it doesnt just take into acount the
+% horizontal or vertical edges and outlines the figure itself.
+
+%% Step 2
+i1 = imread('4.1.05.tiff');
+
+figure();
+imshow(i1);
+
+i1grey = rgb2gray(i1);
+s3 = h3/16;
+i1_s3 = conv2(s3',s3,i1grey);
+
+figure();
+imshow(i1_s3);
+
+hs = ones(2,40)/80;
+ilg_hs = conv2(hs, i1grey);
+
+figure();
+imshow(ilg_hs,[]);
+
+hm = fspecial('motion',41,30);
+ilg_hm = conv2(hm,i1grey);
+
+figure();
+imshow(ilg_hm,[]);
+
+%{
+Checkpoint 2: Show your results to your lab assistant and discuss questions.
+Step 2
+scaled smoothing filter s3 = h3/16:260x260 double
+Compare this display to the input image. Identify some areas in this smoothed image that have less
+sharp detail than the input image.
+the new image is sharper on edges however there are locations such as the
+door and the gutter as well as the windows that are smoother because there
+wasn't as much of a contrast as before
+
+2D smoothing filter with different smoothing in the horizontal and vertical
+directions with hS = ones(2,40)/80. Use full range display
+What is the effect of this filter?257x295 double
+This filter just the horizontal outlines to smooth the edges
+
+motion blur filter: use full range display
+What is the size of this filter? 276x292 double
+Convolve this filter with i1grey and display it. What is the effect of this filter?
+How does it compare to the previous output image?
+This filter blurs the horizontal and vertical to smooth the edges
+%}
+%% Step 3
+i1g_hb  = conv2(hB ,i1grey);
+i1g_hbt = conv2(hB',i1grey);
+
+figure();
+imshow(i1g_hb);
+
+figure();
+imshow(i1g_hbt);
+
+figure();
+imshow(i1g_hb,[]);
+
+figure();
+imshow(i1g_hbt,[]);
+
+i1g_h1 = conv2(h1,i1grey);
+
+figure();
+imshow(i1g_h1,[]);
+
+edge1 = edge(i1grey);
+imshow(edge1);
+
+i2 = imread('eight.tif');
+i2_hB = conv2(hB, i2);
+i2_hBt = conv2(hB',i2);
+
+figure();
+imshow(i2_hB);
+
+figure();
+imshow(i2_hBt);
+
+figure();
+imshow(i2_hB,[]);
+
+figure();
+imshow(i2_hBt);
+
+figure();
+imshow(i2_hBt, []);
+
+i2_h1 = conv2(h1,i2);
+figure();
+imshow(i2_h1,[]);
+edge2 = edge(i2);
+imshow(edge2);
+
+%{
+Step 3
+Full range display: Redisplay the two images with imshow(imout, []) and compare the two displays.
+Which one emphasizes vertical edges?
+i1g_hb  = conv2(hB ,i1grey) emphasizes vertical edges.
+
+Which one emphasizes horizontal edges?
+i1g_hbt  = conv2(hB' ,i1grey) emphasizes horizontal edges.
+
+Is this consistent with the output you observed in Step 1 using the 2D array A1 as the input?
+Yes.
+
+Edge filter:
+How are the displayed edge segments related to the filtered outputs using hB and hB’?
+
+The displayed edge segments are shown as modified edges that can be
+interpreted as post-filter processing. Whatever the filter processing may
+be hB emphasizing vertical edges and hB’ emphasizing horizontal edges.
+
+%}
+%% Step 4
+inoise = 128*rand(80) + 128;
+hg1 = fspecial('gaussian',5 ,0.5);
+hg2 = fspecial('gaussian',15,2.0);
+hg3 = fspecial('gaussian',25,4.0);
+
+ihg1 = conv2(hg1,inoise);
+ihg2 = conv2(hg2,inoise);
+ihg3 = conv2(hg3,inoise);
+
+figure()
+subplot(2,2,1);
+imshow(inoise,[])
+subplot(2,2,2);
+imshow(ihg1,[])
+subplot(2,2,3);
+imshow(ihg2,[])
+subplot(2,2,4);
+imshow(ihg3,[])
+
+hL2 = [0,-1,0 ; -1,5,-1 ; 0,-1,0];
+
+for V = [0 20 40]
+    i1noise = double(i1grey) + V*randn(size(i1grey));
+    ihg1 = conv2(hg1,i1noise);
+    ihg2 = conv2(hg2,i1noise);
+    ihg3 = conv2(hg3,i1noise);
+    ihL2 = conv2(hL2,i1noise);
+    
+    figure()
+    subplot(3,2,1);
+    imshow(i1noise,[])
+    subplot(3,2,2);
+    imshow(ihg1,[])
+    subplot(3,2,3);
+    imshow(ihg2,[])
+    subplot(3,2,4);
+    imshow(ihg3,[])
+    subplot(3,2,5);
+    imshow(ihL2,[]);
+end
+%{
+Step 4
+Gaussian smoothing filters of different sizes: Describe the appearance of the images.
+As we increase in value of the smoothing filters, the noise is reduced in
+our final image. The outlines of our image also gets increasingly bolder as
+well.
+
+What is the effect of the smoothing on the random noise patterns?
+The effect of the smoothing on the random noise patterns feels like it
+generalizes the picture more regardless of the added noise.
+
+Add noise to i1grey and determine the best smoothing filter to reduce the impact of the noise:
+When the noise level V is 0, what is the effect of each of the three Gaussian filters?
+The effect of the three gaussian filters is standard in comparison to
+the expected effect that we see in the first figure.
+
+How well defined are the edges and corners in the sharpened output?
+The edges and the corners are well defined in comparison to the other 
+duller regions.
+
+For the two other values of V, what amount of smoothing do you think makes the best output image
+and why did you choose that level?
+20 bedcause 40 intoduces a lot more noise.
+
+What happens to the sharpened output when there is noise in the image?
+The sharpened output is realtively the same. for the hL filter but
+definitely noisier and messier for the hg1,2,3 filters.
+%}
+##### SOURCE END #####
+--></body></html>
